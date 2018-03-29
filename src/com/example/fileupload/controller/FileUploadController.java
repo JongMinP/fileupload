@@ -7,16 +7,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.fileupload.service.FileUploadService;
+
 @Controller
 public class FileUploadController {
-	
-	@RequestMapping( "/form" )
+
+	@Autowired
+	private FileUploadService fileUploadService;
+
+	@RequestMapping("/form")
 	public String form() {
 		return "form";
 	}
-	
-	@RequestMapping( "/upload" )
-	public String upload() {
+
+	@RequestMapping("/upload")
+	public String upload(Model model, 
+			@RequestParam("email") String email,
+			@RequestParam("file1") MultipartFile multipartFile) {
+
+		String url = fileUploadService.restore(multipartFile);
+		model.addAttribute("url", url);
+
 		return "result";
 	}
 }
